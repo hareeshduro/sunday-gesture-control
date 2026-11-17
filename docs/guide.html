@@ -141,7 +141,7 @@
   .fig { margin: 1mm 0 5mm; page-break-inside: avoid; }
   .fig img { width: 100%; display: block; }
   .fig.framed img { border: 0.5pt solid #e0e0e0; }
-  .fig.narrow { width: 62%; }
+  .fig.narrow { width: 58%; }
   .figcap {
     font-family: ui-monospace, "SF Mono", Menlo, monospace;
     font-size: 7.4pt; letter-spacing: .1em; text-transform: uppercase;
@@ -167,10 +167,7 @@
   .sw i { display: block; height: 10mm; border: 0.5pt solid #e0e0e0; }
   .sw b { display: block; font-size: 8.8pt; margin-top: 1.4mm; }
   .sw span { display: block; font-family: ui-monospace, Menlo, monospace; font-size: 7.4pt; color: #a2a2a2; }
-  .side { display: flex; gap: 6mm; align-items: flex-start; margin-bottom: 4mm; page-break-inside: avoid; }
-  .side > .t { flex: 1; }
-  .side > .i { width: 38%; }
-  .side > .i img { width: 100%; display: block; }
+
 </style>
 </head>
 <body>
@@ -454,7 +451,7 @@ monochrome. That is normal and it recovers on its own.</p>
   <li><b>Tick the lights you want to control</b>, up to eight.</li>
 </ol>
 
-<div class="fig framed"><img src="fig/link-dialog.png" alt="The Link Home Assistant dialog"><div class="figcap">Figure 4 — three steps: authenticate, pick your lights, done</div></div><div class="note key">
+<div class="fig framed narrow"><img src="fig/link-dialog.png" alt="The Link Home Assistant dialog"><div class="figcap">Figure 4 — three steps: authenticate, pick your lights, done</div></div></div><div class="note key">
   <span class="lab">Where your token goes</span>
   <p>It is held in the memory of the small server running on <b>your own machine</b>. It is never
   written to disk, never logged, and never handed back to the browser. Only the address is remembered,
