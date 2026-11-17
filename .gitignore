@@ -11,3 +11,7 @@ docs/.render.html
 # Never commit a Home Assistant token or local config
 .env
 *.token
+
+# Guide build scratch
+docs/_pv.html
+docs/fig/_*.html
