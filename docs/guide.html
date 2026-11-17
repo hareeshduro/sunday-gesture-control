@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SUNDAY — Setup &amp; Modification Guide</title>
+<style>
+  @page { size: A4; margin: 18mm 15mm 15mm 15mm; }
+  @page :first { margin: 0; }
+
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9.4pt;
+    line-height: 1.5;
+    color: #1b1b1b;
+  }
+
+  /* ---------- section masthead ---------- */
+  .secmark {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding-bottom: 2mm; margin-bottom: 4.5mm;
+    border-bottom: 0.5pt solid #1b1b1b;
+  }
+  .secmark .n {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 8.4pt; letter-spacing: .2em; color: #f59a23;
+  }
+  .secmark img { height: 3.4mm; opacity: .78; }
+
+  /* ---------- cover ---------- */
+  .cover {
+    position: relative; z-index: 5;
+    height: 297mm; width: 210mm;
+    background: #0a0f14;
+    color: #f2f2f2;
+    padding: 30mm 24mm;
+    page-break-after: always;
+    display: flex; flex-direction: column;
+  }
+  .cover img.mark { height: 13mm; }
+  .cover .mid { margin-top: auto; }
+  .cover h1 {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 36pt; letter-spacing: .26em; font-weight: 500;
+    margin: 0; color: #fff;
+  }
+  .cover .rule { height: 1.5pt; width: 28mm; background: #f59a23; margin: 9mm 0 8mm; }
+  .cover h2 {
+    font-size: 15pt; font-weight: 400; line-height: 1.5;
+    margin: 0 0 6mm; color: #c8ced3; max-width: 136mm;
+  }
+  .cover p { font-size: 10pt; color: #878f96; max-width: 112mm; margin: 0; }
+  .cover .foot {
+    margin-top: auto; padding-top: 10mm; border-top: 0.5pt solid #2a3139;
+    font-size: 8.5pt; color: #6d757c; line-height: 1.8;
+  }
+  .cover .foot b { color: #c8ced3; font-weight: 500; }
+  .cover .kicker {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 7.5pt; letter-spacing: .3em; text-transform: uppercase;
+    color: #f59a23; margin-bottom: 5mm;
+  }
+
+  /* ---------- sections ---------- */
+  .sec { page-break-before: always; }
+  .sec:first-of-type { page-break-before: auto; }
+  h2.title {
+    font-size: 15pt; font-weight: 500; letter-spacing: -.2px;
+    margin: 0 0 1mm; color: #111; page-break-after: avoid;
+  }
+  .deck { color: #7b7b7b; font-size: 9.4pt; margin: 0 0 5mm; padding-bottom: 3.5mm; border-bottom: 0.5pt solid #e8e8e8; }
+
+  h3 { font-size: 10.4pt; font-weight: 600; margin: 5.5mm 0 1.5mm; color: #111; page-break-after: avoid; }
+  h4 { font-size: 9.2pt; font-weight: 600; margin: 4mm 0 1mm; color: #111; page-break-after: avoid; }
+  h3 + p, h3 + table, h3 + ol, h3 + ul, h4 + pre, h4 + p { page-break-before: avoid; }
+  p { margin: 0 0 2.4mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5.5mm; }
+  li { margin-bottom: 1mm; }
+
+  code, kbd {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 8.6pt; color: #0f0f0f; background: #f3f3f1;
+    padding: 0.2mm 1.1mm; border-radius: 1.5px;
+  }
+  kbd { border: 0.5pt solid #d8d8d8; background: #fff; }
+  pre {
+    background: #f7f7f5; border-left: 1.5pt solid #f59a23;
+    padding: 2.6mm 3.5mm; margin: 0 0 3mm;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 8pt; line-height: 1.5; white-space: pre-wrap; color: #24241f;
+    page-break-inside: avoid;
+  }
+  pre b { font-weight: 600; color: #b06708; }
+
+  table { width: 100%; border-collapse: collapse; margin: 0 0 3.5mm; font-size: 8.6pt; }
+  th {
+    text-align: left; padding: 1.6mm 3mm 1.6mm 0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 7.2pt; letter-spacing: .16em; text-transform: uppercase; color: #9a9a9a;
+    border-bottom: 0.5pt solid #1b1b1b; font-weight: 400;
+  }
+  td { text-align: left; padding: 1.8mm 3mm 1.8mm 0; border-bottom: 0.5pt solid #ececec; vertical-align: top; }
+  td:last-child, th:last-child { padding-right: 0; }
+  tr { page-break-inside: avoid; }
+  td code { font-size: 8.2pt; }
+
+  .note {
+    border-left: 1.5pt solid #d6d6d6; padding: 0 0 0 4mm; margin: 0 0 3.5mm;
+    page-break-inside: avoid; color: #3c3c3c; font-size: 9pt;
+  }
+  .note.key { border-left-color: #f59a23; }
+  .note .lab {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 7.2pt; letter-spacing: .18em; text-transform: uppercase;
+    color: #9a9a9a; display: block; margin-bottom: 1.5mm;
+  }
+  .note.key .lab { color: #b06708; }
+  .note p:last-child { margin-bottom: 0; }
+
+  ol.steps { counter-reset: s; list-style: none; padding-left: 0; }
+  ol.steps > li { counter-increment: s; position: relative; padding-left: 7.5mm; margin-bottom: 1.8mm; }
+  ol.steps > li::before {
+    content: counter(s) "."; position: absolute; left: 0; top: 0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 8.4pt; color: #f59a23;
+  }
+
+  .toc td { border-bottom: 0.5pt dotted #dcdcdc; padding: 2mm 3mm 2mm 0; }
+  .toc td:first-child {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    color: #f59a23; width: 12mm; font-size: 8.4pt;
+  }
+  .toc b { font-weight: 600; }
+  .toc span { color: #7b7b7b; }
+
+  .end { margin-top: 9mm; padding-top: 4mm; border-top: 0.5pt solid #e8e8e8; font-size: 8.6pt; color: #8a8a8a; line-height: 1.75; }
+  .end b { color: #1b1b1b; font-weight: 600; }
+  .glyph { font-size: 11pt; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="cover">
+  <img class="mark" src="data:image/png;base64,__LOGO__" alt="DURO Automation">
+  <div class="mid">
+    <div class="kicker">Concept model</div>
+    <h1>SUNDAY</h1>
+    <div class="rule"></div>
+    <h2>Control the lights in your home with your bare hand.<br>One camera. No cloud. Nothing leaves the room.</h2>
+    <p>Setup and modification guide — written for someone who has never
+       written a line of code.</p>
+  </div>
+  <div class="foot">
+    <b>DURO Automation</b><br>
+    Concept and direction — <b>Hareesh Narayanan</b>
+  </div>
+</section>
+
+<!-- ============ 00 CONTENTS ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">Contents</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">What this guide covers</h2>
+<p class="deck">Read it in order the first time. Everything is here — nothing assumed.</p>
+
+<table class="toc">
+  <tr><td>01</td><td><b>How it works</b> &nbsp;<span>Four pieces in a line</span></td></tr>
+  <tr><td>02</td><td><b>What you need</b> &nbsp;<span>Hardware, software, time</span></td></tr>
+  <tr><td>03</td><td><b>Step one — Home Assistant</b> &nbsp;<span>The brain that talks to your bulbs</span></td></tr>
+  <tr><td>04</td><td><b>Step two — Run SUNDAY</b> &nbsp;<span>Three commands</span></td></tr>
+  <tr><td>05</td><td><b>Step three — Link your home</b> &nbsp;<span>The token and your lights</span></td></tr>
+  <tr><td>06</td><td><b>The gestures</b> &nbsp;<span>Every pose and what it does</span></td></tr>
+  <tr><td>07</td><td><b>How this was built</b> &nbsp;<span>With Claude Code, in four layers</span></td></tr>
+  <tr><td>08</td><td><b>Make it yours</b> &nbsp;<span>Changing it with an AI agent</span></td></tr>
+  <tr><td>09</td><td><b>Ten prompts to copy</b> &nbsp;<span>Paste, adjust, done</span></td></tr>
+  <tr><td>10</td><td><b>If something goes wrong</b></td></tr>
+  <tr><td>11</td><td><b>Limits and credit</b></td></tr>
+</table>
+
+<h3 style="margin-top:12mm">Start here</h3>
+<p>SUNDAY does not know anything about bulbs. It only knows how to say <i>"set that light to 60% and
+make it red"</i> to a piece of free software called <b>Home Assistant</b>, which does the actual
+switching.</p>
+<p>So the order matters. Get Home Assistant working with your lights first. Only then bring in the
+camera. If a light works in Home Assistant it will work in SUNDAY — and if it does not, nothing you
+change in SUNDAY will help.</p>
+
+<div class="note key" style="margin-top:8mm">
+  <span class="lab">Time to expect</span>
+  <p>Home Assistant from scratch, lights added and tested — <b>45 to 90 minutes</b>, once.<br>
+     SUNDAY itself, once Home Assistant works — <b>10 minutes</b>.<br>
+     Your first change with an AI agent — <b>5 minutes</b>.</p>
+</div>
+</section>
+
+<!-- ============ 01 HOW IT WORKS ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">01</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">How it works</h2>
+<p class="deck">Four pieces in a line. Nothing more mysterious than that.</p>
+
+<p>SUNDAY is a web page that watches your hand through a webcam and turns what it sees into commands
+for your smart lights. There is no wake word, no app and no account. Every decision is made on the
+computer you start it on, and <b>camera frames never leave the page</b> — they are not uploaded,
+recorded or sent to any company, including us.</p>
+
+<table>
+  <tr><th style="width:26%">Piece</th><th style="width:34%">What it does</th><th>In practice</th></tr>
+  <tr>
+    <td><b>Your webcam</b></td>
+    <td>Produces pictures, around thirty every second.</td>
+    <td>A laptop camera or any USB webcam. Nothing special.</td>
+  </tr>
+  <tr>
+    <td><b>The hand tracker</b></td>
+    <td>Finds 21 points on your hand in every picture — wrist, knuckles, fingertips.</td>
+    <td>A Google machine-learning model. A copy sits inside the project folder, so it works with the
+        Wi-Fi switched off.</td>
+  </tr>
+  <tr>
+    <td><b>The gesture brain</b><br><code>hand-model.js</code></td>
+    <td>Turns those 21 points into meaning. Is that finger straight? Is this a fist? How far has the
+        wrist turned?</td>
+    <td>The part that was actually built here. Pure geometry — angles and distances — not another
+        AI model.</td>
+  </tr>
+  <tr>
+    <td><b>Home Assistant</b></td>
+    <td>Speaks the language of your real bulbs and does the switching.</td>
+    <td>Free, open-source, runs on your own network. Section 03.</td>
+  </tr>
+</table>
+
+<div class="note">
+  <span class="lab">Why it feels solid rather than twitchy</span>
+  <p>A single camera frame is never trusted. A command only fires when <b>four of the last five frames
+  agree</b>, the pose has been <b>held still</b> for a set time, and your fingers have actually
+  <b>stopped moving</b>. That is why opening your hand to switch the lights on does not accidentally
+  fire "three fingers means blue" on the way past.</p>
+  <p>Every one of those small numbers lives in one place, and section 07 shows you how to change them.</p>
+</div>
+</section>
+
+<!-- ============ 02 WHAT YOU NEED ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">02</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">What you need</h2>
+<p class="deck">Most people already have the first three.</p>
+
+<h3>Hardware</h3>
+<table>
+  <tr><th style="width:30%">Thing</th><th style="width:14%">Needed</th><th>Notes</th></tr>
+  <tr><td>A computer</td><td>Yes</td><td>Mac, Windows or Linux. A laptop from the last six or seven years is plenty.</td></tr>
+  <tr><td>A webcam</td><td>Yes</td><td>The built-in one works. A USB webcam you can aim at where you stand is better.</td></tr>
+  <tr><td>Smart lights</td><td>Yes</td><td>Hue, WiZ, Tuya, Tapo, IKEA, Zigbee, Z-Wave, Shelly — all fine. For the full effect you want
+      bulbs that change <b>colour</b> and <b>brightness</b>.</td></tr>
+  <tr><td>Somewhere to run<br>Home Assistant</td><td>Yes</td><td>A Raspberry Pi, an old laptop, a mini PC, a NAS — or the same computer you run SUNDAY on.</td></tr>
+  <tr><td>A hub or bridge</td><td>Maybe</td><td>Only if your bulbs need one. Wi-Fi bulbs need none.</td></tr>
+</table>
+
+<h3>Software</h3>
+<table>
+  <tr><th style="width:30%">Thing</th><th style="width:14%">Cost</th><th>Why</th></tr>
+  <tr><td><b>Home Assistant</b></td><td>Free</td><td>Talks to your bulbs.</td></tr>
+  <tr><td><b>Node.js</b>, version 18+</td><td>Free</td><td>Runs the small local server that serves the page.</td></tr>
+  <tr><td>A modern browser</td><td>Free</td><td>Chrome, Edge, Brave or Safari. It needs camera permission.</td></tr>
+  <tr><td>An <b>AI coding agent</b></td><td>Free tiers exist</td><td>Only if you want to change how it behaves.</td></tr>
+</table>
+
+<h3>Skills</h3>
+<p>None. You will copy a few lines into a terminal window, and every one of them is printed in this
+guide. If you later want to change how SUNDAY behaves, you will describe the change in plain English
+to an AI agent and it will write the code for you. You never have to read JavaScript.</p>
+
+<div class="note">
+  <span class="lab">Opening a terminal</span>
+  <p><b>Mac</b> — press <kbd>⌘</kbd> <kbd>Space</kbd>, type <i>Terminal</i>, press Enter.<br>
+     <b>Windows</b> — press <kbd>Win</kbd>, type <i>PowerShell</i>, press Enter.</p>
+</div>
+</section>
+
+<!-- ============ 03 HOME ASSISTANT ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">03</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">Step one — Home Assistant</h2>
+<p class="deck">The longest part of the project, and the part that is worth it on its own.
+Skip to section 04 if you already run it.</p>
+
+<p>Home Assistant is free software that sits on your home network and controls your devices locally —
+a universal remote every brand has to obey. Four ways to install it. <b>Pick one.</b></p>
+
+<table>
+  <tr><th style="width:28%">Route</th><th style="width:16%">Difficulty</th><th>Who it suits</th></tr>
+  <tr><td><b>Home Assistant Green</b><br>(buy the box)</td><td>Easiest</td>
+      <td>You want it to simply work. Plug in power and Ethernet. Costs money.</td></tr>
+  <tr><td><b>Raspberry Pi</b> 4 or 5</td><td>Easy</td>
+      <td>The classic route. Write an image to a card, plug it in, leave it running.</td></tr>
+  <tr><td><b>A virtual machine</b></td><td>Medium</td>
+      <td>You have a spare computer and want to try it without buying anything.</td></tr>
+  <tr><td><b>Docker</b></td><td>Medium</td>
+      <td>You already use Docker. Fast — but this variant does not support Add-ons.</td></tr>
+</table>
+
+<p>Whichever you choose, follow <b>home-assistant.io/installation</b> — that page stays current and
+this guide will not. The Raspberry Pi route looks like this:</p>
+
+<ol class="steps">
+  <li>Install <b>Raspberry Pi Imager</b> from raspberrypi.com/software.</li>
+  <li>Under <b>Choose OS</b>, pick <i>Other specific-purpose OS → Home assistants → Home Assistant</i>,
+      then write it to your card. This erases the card.</li>
+  <li>Put the card in the Pi, connect it to your router by <b>Ethernet</b>, power it on, and wait —
+      the first boot can take twenty minutes.</li>
+  <li>Open <code>http://homeassistant.local:8123</code>. If that does not load, find the Pi's address
+      in your router's device list and use <code>http://THAT-IP:8123</code>.</li>
+  <li>Create your account. This is your own server, not a cloud login.</li>
+</ol>
+
+<h3>Now add your lights</h3>
+<p>Home Assistant calls each controllable thing an <b>entity</b>, with an ID like
+<code>light.living_room</code>. Getting your bulbs to appear as entities is the goal here.</p>
+
+<ol class="steps">
+  <li>Go to <b>Settings → Devices &amp; services</b>. Many bulbs appear by themselves under
+      <b>Discovered</b> — if yours are there, click <b>Configure</b>.</li>
+  <li>If not, click <b>Add integration</b> and type your brand — <i>Philips Hue</i>, <i>WiZ</i>,
+      <i>Tuya</i>, <i>Tapo</i>, <i>Shelly</i>, <i>Zigbee Home Automation</i>.</li>
+  <li>Open the <b>Entities</b> tab and search <code>light.</code> &nbsp;Your bulbs should be listed.</li>
+  <li><b>Test every one from inside Home Assistant.</b> Switch it on. Change the brightness. Change
+      the colour.</li>
+</ol>
+
+<div class="note key">
+  <span class="lab">Do not skip that last step</span>
+  <p>Nearly every "SUNDAY doesn't work" message comes down to a light that could not be controlled
+  from Home Assistant in the first place. If the colour wheel does nothing, your bulb is white-only
+  and no gesture can give it colour. If brightness does nothing, it is not dimmable. Far better to
+  learn that now.</p>
+</div>
+
+<p style="margin-top:4mm">Keep two things to hand for section 05 — the <b>address</b> of Home
+Assistant including its port (<code>http://192.168.1.25:8123</code>), and the <b>entity IDs</b> of the
+lights you want to control.</p>
+</section>
+
+<!-- ============ 04 RUN SUNDAY ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">04</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">Step two — Run SUNDAY</h2>
+<p class="deck">Ten minutes. Three commands.</p>
+
+<h3>Install Node.js</h3>
+<p>Go to <b>nodejs.org</b>, download the <b>LTS</b> version, run the installer, accept the defaults.
+Then open a terminal and check it with <code>node -v</code> — you should see something like
+<code>v22.11.0</code>. Anything 18 or above is fine. If it says "command not found", close the
+terminal, open a fresh one and try again.</p>
+
+<h3>Get the project and start it</h3>
+<p>Open the link sent with this guide, press the green <b>Code</b> button, choose <b>Download ZIP</b>
+and unzip it. Then in the terminal:</p>
+<pre>cd "the folder you just unzipped"
+node server.mjs</pre>
+<p>It prints the address it is serving on — normally <code>http://127.0.0.1:8000</code>. Open that in
+your browser. If port 8000 is busy it moves to the next free one and tells you which; to force a
+particular one, use <code>PORT=9000 node server.mjs</code>.</p>
+
+<div class="note">
+  <span class="lab">Leave that terminal open</span>
+  <p><code>node server.mjs</code> runs for as long as you want to use SUNDAY. Closing the window stops
+  the server and the page stops working. To stop it on purpose, click the terminal and press
+  <kbd>Ctrl</kbd> <kbd>C</kbd>.</p>
+</div>
+
+<h3>Engage optics</h3>
+<p>On the page, click <b>Engage optics</b> and allow camera access when the browser asks. Hold up a
+hand — you should see a skeleton drawn over it.</p>
+<p><b>You can stop here and try everything in simulation.</b> With no home linked, SUNDAY runs a demo
+set of lights on screen, so you can learn the gestures before wiring anything real.</p>
+
+<h3>Getting clean tracking</h3>
+<table>
+  <tr><th style="width:38%">Do this</th><th>Because</th></tr>
+  <tr><td>Hold your hand about an <b>arm's length</b> away</td>
+      <td>Closer and it leaves the frame; further and the fingers blur together.</td></tr>
+  <tr><td><b>Palm toward the lens</b>, whole hand visible</td>
+      <td>The tracker needs all 21 points. A hand seen edge-on loses its fingers.</td></tr>
+  <tr><td>Keep some light <b>on your hand</b></td>
+      <td>SUNDAY brightens a dark frame up to 3.2×, but it cannot invent light that is not there.</td></tr>
+  <tr><td>Avoid a bright window <b>behind</b> you</td>
+      <td>Backlight turns your hand into a silhouette.</td></tr>
+  <tr><td>Either hand works</td>
+      <td>The thumb is deliberately left out of the finger count, so left and right read identically.</td></tr>
+</table>
+<p>The <b>Optics</b> readout shows what the camera correction is doing. A room lit bright red at full
+brightness clips the sensor, so SUNDAY pulls the saturation down and, if it is still losing you, goes
+monochrome. That is normal and it recovers on its own.</p>
+</section>
+
+<!-- ============ 05 LINK ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">05</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">Step three — Link your home</h2>
+<p class="deck">One token, one address, up to eight lights.</p>
+
+<h3>Create the access token</h3>
+<ol class="steps">
+  <li>Open Home Assistant.</li>
+  <li>Click <b>your name</b> at the bottom of the left sidebar.</li>
+  <li>Open the <b>Security</b> tab and scroll to <b>Long-lived access tokens</b>.</li>
+  <li>Click <b>Create token</b> and name it <i>SUNDAY</i>.</li>
+  <li><b>Copy it now.</b> Home Assistant shows a token exactly once. If you lose it, delete it and
+      make another.</li>
+</ol>
+
+<h3>Paste it in</h3>
+<ol class="steps">
+  <li>On the SUNDAY page, click <b>Link home</b>.</li>
+  <li>Enter the address — <code>http://192.168.1.25:8123</code>. Nothing after the port number.</li>
+  <li>Paste the token and connect.</li>
+  <li><b>Tick the lights you want to control</b>, up to eight.</li>
+</ol>
+
+<div class="note key">
+  <span class="lab">Where your token goes</span>
+  <p>It is held in the memory of the small server running on <b>your own machine</b>. It is never
+  written to disk, never logged, and never handed back to the browser. Only the address is remembered,
+  so the form is prefilled next time. Clicking <b>Unlink</b>, or stopping the server, erases it.</p>
+  <p>That server also refuses requests from any other machine, and will only ever send three commands —
+  switch on, switch off, toggle — and only to the entities you ticked.</p>
+</div>
+
+<h3>If linking fails</h3>
+<table>
+  <tr><th style="width:44%">What it says</th><th>What to do</th></tr>
+  <tr><td>Rejected the access token</td><td>Wrong, expired or revoked. Create a new one.</td></tr>
+  <tr><td>The name could not be found</td><td><code>homeassistant.local</code> is not resolving. Use the IP address.</td></tr>
+  <tr><td>Refused the connection</td><td>Wrong port. Home Assistant is normally on 8123.</td></tr>
+  <tr><td>Did not answer in time</td><td>Wrong address, or you are on a different network — guest Wi-Fi, or a VPN.</td></tr>
+  <tr><td>REST API was not found</td><td>You left an extra path on the address. Trim it to host and port.</td></tr>
+  <tr><td>Certificate could not be verified</td><td>On a home network use plain <code>http://</code>.</td></tr>
+  <tr><td>Local server not responding</td><td><code>node server.mjs</code> is not running.</td></tr>
+</table>
+</section>
+
+<!-- ============ 06 GESTURES ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">06</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">The gestures</h2>
+<p class="deck">One hand. Either hand. The thumb is never counted as a finger.</p>
+
+<table>
+  <tr><th style="width:9%"></th><th style="width:30%">Do this</th><th style="width:33%">And</th><th>Hold</th></tr>
+  <tr><td class="glyph">☰</td><td><b>Open palm</b>, held up</td><td>Lights on, at the colour and level you last used</td><td>0.7 s</td></tr>
+  <tr><td class="glyph">↻</td><td><b>Turn that hand right</b></td><td>Brighter</td><td>continuous</td></tr>
+  <tr><td class="glyph">↺</td><td><b>Turn that hand left</b></td><td>Dimmer</td><td>continuous</td></tr>
+  <tr><td class="glyph">●</td><td><b>Closed fist</b>, held</td><td>Everything off — always, from any state</td><td>0.8 s</td></tr>
+  <tr><td class="glyph">◉</td><td><b>Pinch</b> index to thumb</td><td>Brightness knob on, so any hand shape can turn it</td><td>on contact</td></tr>
+  <tr><td class="glyph">◎</td><td><b>Open the hand, pinch again</b></td><td>Knob off</td><td>0.2 s</td></tr>
+  <tr><td class="glyph">1</td><td><b>One finger</b></td><td>Red</td><td>0.6 s</td></tr>
+  <tr><td class="glyph">2</td><td><b>Two fingers</b></td><td>Green</td><td>0.6 s</td></tr>
+  <tr><td class="glyph">3</td><td><b>Three fingers</b></td><td>Blue</td><td>0.6 s</td></tr>
+  <tr><td class="glyph">4</td><td><b>Four fingers</b></td><td>White</td><td>0.9 s</td></tr>
+  <tr><td class="glyph">▲</td><td><b>Thumb up</b>, held</td><td>Brightness climbs steadily</td><td>0.5 s to arm</td></tr>
+  <tr><td class="glyph">▼</td><td><b>Thumb down</b>, held</td><td>Brightness falls steadily</td><td>0.5 s to arm</td></tr>
+</table>
+
+<h3>The brightness knob</h3>
+<p><b>An open palm is the knob.</b> Hold one up and turn it like a steering wheel — right brightens,
+left dims. Nothing has to be switched on first.</p>
+<ul>
+  <li>The palm stays <b>passive until you actually turn it</b>, so showing one to switch the lights on
+      does not move the brightness.</li>
+  <li><b>Both kinds of turning count</b> — tilting the hand like a steering wheel, and twisting the
+      wrist like a doorknob. People mean different things by "rotate your hand".</li>
+  <li>It is <b>relative</b>. The knob picks up whatever level the lights are already at, so turning
+      back to where you started returns the brightness you started with.</li>
+  <li>A <b>60° turn covers the whole range</b>, on a curve — gentle at first, stronger the further you
+      go. Ten degrees moves it about 9%.</li>
+  <li>It will <b>not switch the light off</b>. The floor is 2%.</li>
+  <li>A blink in tracking does not drop it. It releases itself after 2.4 seconds with no hand in frame.</li>
+</ul>
+
+<h3>What the pinch is for</h3>
+<p>The knob normally wants an open palm. Pinch once and you can keep turning the brightness with your
+hand in <b>any</b> shape, which is more comfortable for long adjustments. Open your hand and pinch
+again to stop. The live gap between your fingertips is printed between them on a 0–100 scale, so you
+can watch a pinch closing rather than guess at it.</p>
+<p>While the knob is turning, <b>colour commands are ignored</b> — that is the only thing it
+suppresses. A <b>closed fist always works</b>, locked or not, mid-turn or not. Nothing in this project
+is allowed to leave you unable to switch your own lights off.</p>
+
+<h3>Colour</h3>
+<p>All four colours share <b>one brightness</b>. The level belongs to the room, not to the colour, so
+going 1–2–3–4 recolours the light you already have without changing how bright it is. White uses a
+dedicated white LED if your lamp has one, otherwise a neutral 5000 K, and only mixes red-green-blue
+as a last resort — mixed white is dimmer and slightly tinted.</p>
+
+<h3>The colour code on screen</h3>
+<table>
+  <tr><th style="width:24%">Colour</th><th>Meaning</th></tr>
+  <tr><td><b>Cyan</b></td><td>Tracking your hand. Knob off.</td></tr>
+  <tr><td><b>Green</b></td><td>Fingertips pinched.</td></tr>
+  <tr><td><b>Pale cyan</b></td><td>Pinch again to release.</td></tr>
+  <tr><td><b>Amber</b></td><td>Knob on — turn to dim.</td></tr>
+</table>
+<p>The same four colours drive the hand overlay, the chip on the camera view and the edge of the stage,
+so the state is readable out of the corner of your eye while you watch your own hand.</p>
+
+<h3>Keyboard, for when you would rather not wave</h3>
+<p>Every gesture also has a key and an on-screen button.</p>
+<p><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> colours &nbsp;&nbsp; <kbd>5</kbd> on &nbsp;&nbsp;
+<kbd>0</kbd> off &nbsp;&nbsp; <kbd>Space</kbd> knob &nbsp;&nbsp; <kbd>Enter</kbd> toggle power
+&nbsp;&nbsp; <kbd>→</kbd> <kbd>↑</kbd> brighter &nbsp;&nbsp; <kbd>←</kbd> <kbd>↓</kbd> dimmer</p>
+</section>
+
+<!-- ============ 07 HOW IT WAS BUILT ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">07</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">How this was built</h2>
+<p class="deck">The honest version, for everyone who asked. It was built by describing it in plain
+English to Claude Code, in layers, over many rounds.</p>
+
+<p>No part of this started as a plan on paper. It started as one sentence — <i>"I want to control my
+lights by moving my hand in front of a webcam, with nothing going to the cloud"</i> — typed into an
+AI coding agent, and then corrected a few hundred times until it felt right.</p>
+
+<h3>The setup</h3>
+<ol class="steps">
+  <li>Install <b>Node.js</b> from nodejs.org.</li>
+  <li>Install <b>Claude Code</b> and open an empty folder with it:
+      <pre style="margin:2mm 0 0">npm install -g @anthropic-ai/claude-code
+mkdir gesture-home &amp;&amp; cd gesture-home
+claude</pre></li>
+  <li>Type the first instruction. That is the entire setup.</li>
+</ol>
+
+<h3>Built in four layers, in this order</h3>
+<p>The order is the important part. Each layer was made to work properly before the next one started,
+so there was never more than one thing that could be wrong.</p>
+
+<table>
+  <tr><th style="width:8%"></th><th style="width:30%">Layer</th><th>Roughly what was asked for</th></tr>
+  <tr>
+    <td><b>1</b></td><td><b>See the hand</b></td>
+    <td><i>"Build a web page that opens my webcam and draws the hand skeleton on top of it using
+        MediaPipe hand landmarks. Keep the model files in the project folder so it works offline.
+        No lights yet."</i></td>
+  </tr>
+  <tr>
+    <td><b>2</b></td><td><b>Understand the hand</b></td>
+    <td><i>"Now put the hand geometry in its own file with no screen code in it. Work out whether each
+        finger is extended using joint angles and how far the tip reaches from the wrist, so a rotated
+        or mirrored hand reads the same. Show me the finger count on screen."</i></td>
+  </tr>
+  <tr>
+    <td><b>3</b></td><td><b>Make it steady</b></td>
+    <td><i>"A single bad frame must never reach anything. Require four of the last five frames to
+        agree, require the pose to be held still, and don't let a command fire while my fingers are
+        still moving."</i></td>
+  </tr>
+  <tr>
+    <td><b>4</b></td><td><b>Connect real lights</b></td>
+    <td>Section below.</td>
+  </tr>
+</table>
+
+<h3>Connecting it to Home Assistant</h3>
+<p>This is the part most people want, and it is simpler than it looks. Home Assistant has a web API.
+You create one token, and anything holding that token can control your house — which is exactly why
+the token is not allowed anywhere near the browser.</p>
+
+<ol class="steps">
+  <li>In Home Assistant, <b>profile → Security → Create token</b>. Copy it once.</li>
+  <li>Ask the agent for a <b>small local server</b> that keeps the token and does the talking.
+      The actual request was close to this:
+      <pre style="margin:2mm 0 0">Write a small Node server with no dependencies that serves these files and
+proxies Home Assistant. It takes my token in memory only — never write it to
+disk, never log it, never send it back to the browser. It must refuse requests
+from any machine but this one, allow only turn_on, turn_off and toggle, and
+only on the entities I explicitly selected.</pre></li>
+  <li>Then the page side: <i>"Let me paste my Home Assistant address and token in a dialog, fetch the
+      list of light entities, and let me tick up to eight of them."</i></li>
+  <li>Finally, wire the gestures to those lights — open palm on, fist off, finger counts to colours,
+      wrist rotation to brightness.</li>
+</ol>
+
+<div class="note key">
+  <span class="lab">Why the server exists at all</span>
+  <p>A web page cannot be trusted with a token that controls your home. Putting it in a server on your
+  own machine means the browser never sees it, and the server can refuse anything that is not one of
+  three harmless commands on a list of lights you chose yourself. Ask for that shape of design
+  explicitly — an agent will happily do the easy, unsafe thing if you do not.</p>
+</div>
+
+<h3>The loop that actually mattered</h3>
+<p>Writing the first version took an evening. Making it <b>feel</b> right took far longer, and it was
+all the same loop:</p>
+<ol class="steps">
+  <li>Stand in front of the camera and use it.</li>
+  <li>Describe what felt wrong in <b>ordinary words</b> — not in code terms.
+      <i>"The lights jump across the room when my wrist wobbles."</i>
+      <i>"My pinch does nothing unless I let go quickly."</i>
+      <i>"When I open my hand to switch on, it comes on blue."</i></li>
+  <li>Let the agent find the cause and propose a fix. Make it explain the fix first.</li>
+  <li>Try it again. Keep it or throw it away with <code>git checkout .</code></li>
+</ol>
+<p>Almost every number in this project — 60° for the full brightness range, 620 ms before a colour
+fires, four frames out of five — came out of that loop, not out of a plan.</p>
+
+<h3>The two habits that made the difference</h3>
+<ul>
+  <li><b>Write down what failed.</b> The README in the project records the approaches that were tried
+      and abandoned, and why. That is not documentation for show — it is what stops an agent
+      confidently reintroducing a bug that was already fixed once.</li>
+  <li><b>Ask for tests on the parts that matter.</b> There are two suites, 91 cases on gesture
+      recognition and 99 on the control logic. They exist because the same bug kept coming back, and
+      a test is the only thing that makes a fix permanent.</li>
+</ul>
+
+<p>That is the whole method. Describe the behaviour you want in plain language, build one layer at a
+time, test it with your own hand, and keep a record of what did not work. You can rebuild this
+project — or something quite different — with nothing more than that.</p>
+</section>
+
+<!-- ============ 08 MAKE IT YOURS ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">08</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">Make it yours</h2>
+<p class="deck">Changing the project with an AI agent — no coding, but there is a method.</p>
+
+<h3>What an AI coding agent is</h3>
+<p>A program you hand a folder of code to, and then talk to in plain English. It reads the files
+itself, makes the changes itself and runs the tests itself. Any of these will do:</p>
+<table>
+  <tr><th style="width:26%">Agent</th><th style="width:22%">Where you use it</th><th>Notes</th></tr>
+  <tr><td><b>Cursor</b></td><td>A code editor</td><td>Friendliest if you have never used a terminal. Install, open the folder, type in the chat panel.</td></tr>
+  <tr><td><b>Claude Code</b></td><td>Terminal or VS Code</td><td>What this project was built with. Strongest at "read everything first, then change one thing".</td></tr>
+  <tr><td><b>Copilot agent mode</b></td><td>Inside VS Code</td><td>Fine for small, clearly described edits.</td></tr>
+  <tr><td><b>Gemini CLI, Codex</b></td><td>Terminal</td><td>Also fine. The prompts overleaf are not specific to any one of them.</td></tr>
+</table>
+
+<h4>The quickest start</h4>
+<ol class="steps">
+  <li>Install <b>Cursor</b> from cursor.com.</li>
+  <li><b>File → Open Folder</b>, choose the project folder.</li>
+  <li>Press <kbd>⌘</kbd> <kbd>I</kbd> (or <kbd>Ctrl</kbd> <kbd>I</kbd>) for the agent panel.</li>
+  <li>Paste a prompt from section 09. Read what it proposes. Accept it.</li>
+  <li>Reload the page in your browser and try it.</li>
+</ol>
+<p>A good first thing to type, before changing anything:</p>
+<pre>Read README.md, then app.js and hand-model.js, and explain in plain English how a
+gesture becomes a command to a light. Do not change anything yet.</pre>
+
+<h3>Set up the safety net first</h3>
+<p>Five minutes now saves an afternoon later. In the project folder:</p>
+<pre>git init
+git add -A
+git commit -m "working version before my changes"</pre>
+<p>Now if a change makes things worse, throw it away completely:</p>
+<pre>git checkout .</pre>
+<p>And when a change works, lock it in with <code>git add -A</code> then
+<code>git commit -m "what I changed"</code>. That is the whole safety net — you never need to
+understand git beyond those four commands.</p>
+
+<h3>How to write an instruction that works</h3>
+<p>A weak prompt gets a weak change. A good one has four parts: what you want to <b>happen</b>, what
+happens <b>instead</b> today, <b>where</b> to look, and how you will <b>check</b> it. Fill in the
+blanks:</p>
+<pre>I want to change SUNDAY so that <b>[what you want to happen]</b>.
+Right now <b>[what happens instead]</b>.
+
+Read README.md first for the design reasoning, then make the smallest change that
+achieves this. The relevant code is probably <b>[file or setting, if you know it]</b>.
+
+Rules:
+- Change one thing only. Do not tidy up anything I did not ask about.
+- A closed fist must still switch everything off from any state.
+- Explain what you changed, in plain English, before I test it.</pre>
+
+<h3>Four rules</h3>
+<ol>
+  <li><b>One change at a time.</b> Ask, test, commit, then ask for the next. Five changes at once means
+      five suspects when something breaks.</li>
+  <li><b>Point it at the README first.</b> It records <i>why</i> every number is what it is, including
+      a dozen approaches that were tried and failed. An agent that reads it will not cheerfully
+      reintroduce a bug that was already fixed.</li>
+  <li><b>Make it explain before you accept.</b> If the explanation does not make sense to you, the
+      change is probably wrong. "That doesn't sound right, explain it differently" is a perfectly
+      good thing to say to an agent.</li>
+  <li><b>Ask it to run the tests.</b> There are two suites — 91 cases on gesture recognition, 99 on the
+      control logic. Say <i>"run the test suites and show me the output."</i></li>
+</ol>
+
+<div class="note key">
+  <span class="lab">The one thing never to change</span>
+  <p>A closed fist switches everything off, from any state, always. An early version made other
+  gestures inert while the knob was locked, and one stray pinch left someone unable to switch their
+  own lights off. If an agent proposes putting any condition on the fist, reject it.</p>
+</div>
+
+<h3>Where to point it</h3>
+<table>
+  <tr><th style="width:46%">To change…</th><th>Tell it to look at</th></tr>
+  <tr><td>The exact shade of each colour</td><td><code>COLORS</code> in <code>app.js</code></td></tr>
+  <tr><td>How far you turn your wrist for full brightness</td><td><code>ROLL.span</code> in <code>hand-model.js</code></td></tr>
+  <tr><td>A knob that is too twitchy, or too sluggish</td><td><code>ROLL.dead</code> and <code>ROLL.curve</code></td></tr>
+  <tr><td>How long a pose is held before it fires</td><td><code>HOLD_MS</code>, <code>COLOR_SETTLE_MS</code> in <code>app.js</code></td></tr>
+  <tr><td>A gesture that fires by accident</td><td><code>VOTE_AGREE</code>, <code>FINGER_STILL</code>, <code>REPEAT_MS</code></td></tr>
+  <tr><td>A pinch that is hard to trigger</td><td><code>LIMITS.pinchClose</code> in <code>hand-model.js</code></td></tr>
+  <tr><td>Which gestures are listed on screen</td><td><code>PROTOCOL</code> in <code>app.js</code></td></tr>
+  <tr><td>Adding a whole new hand pose</td><td><code>classify()</code> in <code>hand-model.js</code>, then <code>app.js</code></td></tr>
+  <tr><td>Controlling something that is not a light</td><td>the allowed-services list in <code>server.mjs</code></td></tr>
+  <tr><td>Colours, fonts, the whole look</td><td>the variables at the top of <code>styles.css</code></td></tr>
+</table>
+</section>
+
+<!-- ============ 08 PROMPTS ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">09</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">Ten prompts to copy</h2>
+<p class="deck">Paste one into your agent and change the words in brackets.</p>
+
+<h4>1 — Make the brightness knob calmer</h4>
+<pre>In hand-model.js the knob response is the ROLL object. A small wrist wobble moves
+the lights too far. Increase the slack and the span so it is calmer, keep the floor
+at 2%, then print the new table of turn against brightness so I can see the effect.</pre>
+
+<h4>2 — I have to turn my wrist too far</h4>
+<pre>Reaching full brightness needs more wrist rotation than is comfortable. In
+hand-model.js, reduce ROLL.span so a smaller turn covers the range, but keep the
+curve gentle enough that a 10-degree turn still moves the lights less than 15%.
+Then run the control test suite and show me the output.</pre>
+
+<h4>3 — Change the colours</h4>
+<pre>In app.js, the COLORS array holds the four colours sent to the lamp. Change them to
+<b>[warm orange, deep purple, soft pink, warm white]</b>. Read the comments above COLORS
+first — they explain why blue carries some green and why white prefers a dedicated
+white LED over mixed RGB. Keep that reasoning intact for my new colours.</pre>
+
+<h4>4 — Poses fire too slowly</h4>
+<pre>Holding a pose feels sluggish. In app.js, reduce HOLD_MS and COLOR_SETTLE_MS by about
+a quarter, but leave white longer than the other colours and leave the fist longest of
+all. Explain why those two exceptions exist before you change anything.</pre>
+
+<h4>5 — The lights come on in the wrong colour</h4>
+<pre>Sometimes when I open my hand to switch the lights on, they come on in the wrong
+colour. The README has a section called "Why the lights used to come on blue" that
+diagnoses this. Read it, check the guards it describes are all still in place in
+app.js, and tighten whichever one is letting this through. Tell me which it was.</pre>
+
+<h4>6 — Add a new gesture</h4>
+<pre>I want a new gesture: <b>[describe the hand shape]</b> should <b>[describe what it does]</b>.
+
+Work in this order and show me each step:
+1. In hand-model.js, add the detection to classify(), in the same style as the
+   existing poses — angles and ratios, not screen positions, so it still reads the
+   same if my hand is rotated or mirrored.
+2. Tell me which existing pose it is closest to, and what the margin is.
+3. Add it to PROTOCOL in app.js with a glyph and a label.
+4. Wire it up, and add a case to the classification tests.</pre>
+
+<h4>7 — Control a fan, not just lights</h4>
+<pre>I want to control a Home Assistant fan as well as lights. Right now server.mjs allows
+only switch on, switch off and toggle, and only on the entities I ticked. Extend it to
+allow the fan domain with fan.set_percentage, keeping every existing safety rule
+exactly as it is. Then in app.js, let a selected fan be driven by the brightness knob
+so turning my hand changes fan speed. Explain the security implications.</pre>
+
+<h4>8 — Put my own branding on it</h4>
+<pre>Change the look to my own branding. The palette is CSS variables at the top of
+styles.css — replace the teal and orange with <b>[#hex]</b> and <b>[#hex]</b>. Rename the
+assistant from SUNDAY to <b>[NAME]</b> everywhere in index.html and app.js, and swap the
+logo for assets/<b>[my-file.png]</b>. Keep the contrast readable and keep the four HUD
+state colours clearly distinct from one another.</pre>
+
+<h4>9 — Explain it to me</h4>
+<pre>I am not a programmer. Read hand-model.js and explain in plain English, with no
+jargon, how the code decides whether a finger is extended, and why it uses two
+separate tests instead of one.</pre>
+
+<h4>10 — Work out why a gesture is dead</h4>
+<pre>The <b>[three-finger blue]</b> gesture almost never fires for me, but everything else works.
+Add a temporary debug readout to the screen showing, every frame: the raw finger count,
+how long that count has been stable, the thumb-to-index gap, the fingertip movement
+speed, and which guard is currently blocking a command. Then tell me what to watch for
+when I try the gesture, so I can tell you which number is wrong.</pre>
+
+<div class="note" style="margin-top:7mm">
+  <span class="lab">Worth running before any change</span>
+  <p><i>"Before you change anything, read README.md and tell me whether what I am asking for was
+  already tried and rejected in this project, and why."</i></p>
+  <p>The README is unusually honest about its own dead ends. More than one obvious improvement is
+  recorded in there as a documented failure.</p>
+</div>
+</section>
+
+<!-- ============ 09 TROUBLE ============ -->
+<section class="sec">
+<header class="secmark"><span class="n">10</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">If something goes wrong</h2>
+<p class="deck">In rough order of how often it happens.</p>
+
+<table>
+  <tr><th style="width:40%">What you see</th><th>What it is</th></tr>
+  <tr><td>The page will not load</td>
+      <td><code>node server.mjs</code> is not running, or you are on the wrong port. Read what the
+      terminal printed.</td></tr>
+  <tr><td>"Engage optics" does nothing</td>
+      <td>Camera permission was denied. Click the camera or lock icon in the address bar, allow it,
+      reload. Check no other app is holding the camera.</td></tr>
+  <tr><td>No skeleton appears on my hand</td>
+      <td>Too far, too close, too dark or backlit. Arm's length, palm to the lens, light on your hand.</td></tr>
+  <tr><td>Gestures are recognised but the lights do nothing</td>
+      <td>Home Assistant is not linked, or the entities are not ticked. Reopen <b>Link home</b>.</td></tr>
+  <tr><td>Brightness seems not to work in blue</td>
+      <td>Partly physics — a blue LED produces only about 7% of what your eye reads as brightness.
+      SUNDAY already compensates. If nothing moves at all, test that bulb's dimming in Home Assistant.</td></tr>
+  <tr><td>The fist does not switch off</td>
+      <td>Hold it slightly longer. It is deliberately the slowest pose, because it is the one
+      destructive action.</td></tr>
+  <tr><td>The lights come on in a colour I did not pick</td>
+      <td>Working as designed — it restores the colour and level you last used. Pick a colour while
+      they are on to change it.</td></tr>
+  <tr><td>The knob switches itself off mid-turn</td>
+      <td>Your hand left the frame for more than 2.4 seconds.</td></tr>
+  <tr><td>Everything got slow</td>
+      <td>Close other camera-heavy tabs. The correction works harder when it is losing you, and that
+      costs frames.</td></tr>
+  <tr><td>An AI change made it worse</td>
+      <td>In the project folder, run <code>git checkout .</code> to return to your last commit.</td></tr>
+</table>
+</section>
+
+<!-- ============ 11 LIMITS ============ -->
+<section>
+<header class="secmark"><span class="n">11</span><img src="data:image/png;base64,__LOGO__" alt="DURO Automation"></header>
+<h2 class="title">Limits and credit</h2>
+<p class="deck">What it is honestly good at, and what it is not.</p>
+
+<div class="note key">
+  <span class="lab">Please read this one</span>
+  <p>This is a <b>concept demo</b>, not a certified accessibility, security or safety system.
+  <b>Do not make it the only way to control anything that matters.</b> Keep your wall switches and
+  keep the Home Assistant app on your phone. A camera that cannot see your hand is a remote that does
+  not work, and that is a bad thing to discover in the dark.</p>
+</div>
+
+<table>
+  <tr><th style="width:50%">Does well</th><th>Does not do</th></tr>
+  <tr>
+    <td>
+      <ul style="margin:0 0 0 0">
+        <li>One hand, either hand, rotated or mirrored</li>
+        <li>Runs with the internet off</li>
+        <li>Recovers from dark, bright and colour-washed rooms</li>
+        <li>Keyboard and on-screen equivalents for every gesture</li>
+        <li>Remembers your colour and level across reloads</li>
+      </ul>
+    </td>
+    <td>
+      <ul style="margin:0">
+        <li>Two hands at once</li>
+        <li>More than eight devices</li>
+        <li>Anything other than lights, out of the box</li>
+        <li>Working across a dark room</li>
+        <li>Anything over the internet — it is local by design</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<h3>Privacy, plainly</h3>
+<p>The camera feed is processed inside your browser tab and is never uploaded, recorded or
+transmitted. The hand-tracking model is a file in the project folder, not a web service. Your Home
+Assistant token lives only in the memory of a server on your own machine and is erased when you stop
+it. There is no account, no telemetry and no analytics anywhere in this project.</p>
+
+<h3>Use it, change it, show it</h3>
+<p>Take it apart. Rename it. Put your own logo on it. Film it. The only thing asked in return is that
+you do not claim you built the original — and if you post it, a credit is appreciated.</p>
+
+<div class="end">
+  <b>SUNDAY</b> — the AI of DURO Automation.<br>
+  Concept and direction — <b>Hareesh Narayanan</b>.<br>
+  The project folder and the latest version of this guide are at the link sent alongside it.
+</div>
+</section>
+
+</body>
+</html>

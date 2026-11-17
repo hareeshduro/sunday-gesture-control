@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#03070d" />
+    <meta name="description" content="SUNDAY — the AI of DURO Automation. An offline, gesture-controlled smart home assistant." />
+    <meta name="author" content="Hareesh Narayanan" />
+    <title>SUNDAY — Concept Model of DURO Automation</title>
+    <link rel="icon" href="./assets/duro-automation-logo.png" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to controls</a>
+
+    <div class="backdrop" aria-hidden="true">
+      <div class="bd-nebula"></div>
+      <div class="bd-grid"></div>
+      <div class="bd-vignette"></div>
+    </div>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <div class="identity">
+          <img class="duro-mark" src="./assets/duro-automation-logo.png" alt="DURO Automation" />
+          <span class="rule" aria-hidden="true"></span>
+          <div class="sunday">
+            <div class="sunday-row">
+              <span class="reactor" id="reactor" aria-hidden="true"><i></i><u></u><b></b></span>
+              <h1>SUNDAY</h1>
+              <span class="concept-tag">Concept Model</span>
+            </div>
+            <p class="sunday-sub">The AI of DURO Automation</p>
+          </div>
+        </div>
+
+        <div class="masthead-actions">
+          <div class="clock" id="clock" aria-hidden="true">--:--:--</div>
+          <button class="chip" id="status-pill" type="button">
+            <span class="chip-dot" aria-hidden="true"></span><span id="status-text">Standalone</span>
+          </button>
+          <button class="btn btn-key" id="open-setup" type="button">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .4 2l.1.1a1.8 1.8 0 1 1-2.6 2.5l-.1-.1a1.8 1.8 0 0 0-3 1.3v.2a1.8 1.8 0 1 1-3.6 0v-.1a1.8 1.8 0 0 0-3.1-1.3l-.1.1A1.8 1.8 0 1 1 4.8 17l.1-.1a1.8 1.8 0 0 0-1.2-3.1H3.5a1.8 1.8 0 1 1 0-3.6h.1A1.8 1.8 0 0 0 4.9 7l-.1-.1a1.8 1.8 0 1 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-1.2v-.2a1.8 1.8 0 1 1 3.6 0v.1a1.8 1.8 0 0 0 3.1 1.2l.1-.1a1.8 1.8 0 1 1 2.5 2.6l-.1.1a1.8 1.8 0 0 0 1.2 3h.2a1.8 1.8 0 1 1 0 3.6h-.1a1.8 1.8 0 0 0-1.6 1.1Z"/></svg>
+            <span>Link home</span>
+          </button>
+        </div>
+      </div>
+      <div class="masthead-edge" aria-hidden="true"></div>
+    </header>
+
+    <div class="sysline" id="sysline" data-tone="info">
+      <span class="sysline-tag">SYS</span>
+      <p><strong id="sysline-title">Standalone mode</strong><span id="status-detail">No home linked. Controls move the simulation only.</span></p>
+      <button class="btn btn-ghost btn-sm" id="sysline-action" type="button">Link home</button>
+    </div>
+
+    <main class="shell" id="main">
+      <div class="layout">
+        <!-- ============================================ 01 optical array -->
+        <section class="panel panel-optics" aria-labelledby="optics-title">
+          <div class="panel-head">
+            <span class="panel-no">01</span>
+            <h2 id="optics-title">Optical array</h2>
+            <span class="panel-meta" id="fps-label">Standby</span>
+          </div>
+
+          <div class="stage" id="stage">
+            <video id="camera" autoplay muted playsinline aria-label="Camera preview"></video>
+            <canvas id="hud" aria-hidden="true"></canvas>
+
+            <span class="corner tl" aria-hidden="true"></span>
+            <span class="corner tr" aria-hidden="true"></span>
+            <span class="corner bl" aria-hidden="true"></span>
+            <span class="corner br" aria-hidden="true"></span>
+            <span class="sweep" aria-hidden="true"></span>
+
+            <div class="stage-idle" id="stage-idle">
+              <div class="idle-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+              <h3>Optical array offline</h3>
+              <p>Tracking runs entirely on this machine.<br />No video or landmark data leaves the device.</p>
+              <button class="btn btn-key btn-lg" id="start-camera" type="button">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                <span>Engage optics</span>
+              </button>
+            </div>
+
+            <div class="stage-live" id="stage-live" hidden>
+              <span class="tag-live"><i></i> Tracking</span>
+              <span class="dial-chip" id="dial-chip" data-phase="idle">
+                <svg class="roll-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle class="roll-ring" cx="12" cy="12" r="8.6"/>
+                  <path class="roll-arc" d="M4.6 8.2A8.6 8.6 0 0 1 19.4 8.2"/>
+                  <g class="roll-needle" id="roll-needle"><path d="M12 12V4.4"/></g>
+                  <circle class="roll-hub" cx="12" cy="12" r="1.8"/>
+                </svg>
+                <span><b id="dial-state">70%</b><i id="dial-note">open palm · turn to dim</i></span>
+              </span>
+              <button class="btn btn-glass btn-sm" id="stop-camera" type="button">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                <span>Disengage</span>
+              </button>
+            </div>
+
+            <div class="toast" id="toast" role="status" hidden>
+              <span class="toast-bar" aria-hidden="true"></span><span id="toast-text"></span>
+            </div>
+          </div>
+
+          <!-- live telemetry -->
+          <div class="telemetry">
+            <div class="tele tele-wide">
+              <span class="tele-key">Gesture</span>
+              <strong class="tele-val" id="gesture-name">No hand</strong>
+              <span class="tele-sub" id="gesture-detail">Show your hand to the camera</span>
+            </div>
+            <div class="tele">
+              <span class="tele-key">Digits</span>
+              <div class="pips" id="pips" aria-hidden="true"><i data-f="T"></i><i data-f="I"></i><i data-f="M"></i><i data-f="R"></i><i data-f="P"></i></div>
+            </div>
+            <div class="tele">
+              <span class="tele-key">Pinch gap</span>
+              <strong class="tele-val" id="pinch-val">—</strong>
+              <span class="tele-sub" id="pinch-state">open</span>
+            </div>
+            <div class="tele">
+              <span class="tele-key">Hand turn</span>
+              <strong class="tele-val" id="roll-val">—</strong>
+              <span class="tele-sub" id="roll-sub">tilt or twist it</span>
+            </div>
+            <div class="tele">
+              <span class="tele-key">Optics</span>
+              <strong class="tele-val" id="assist-val">Direct</strong>
+              <span class="tele-sub" id="assist-sub">none</span>
+            </div>
+          </div>
+
+          <div class="lockbar" id="lockbar">
+            <span class="tele-key">Command</span>
+            <div class="lock-track"><div class="lock-fill" id="lock-fill"></div></div>
+            <span class="lock-status" id="lock-status">Standby</span>
+          </div>
+        </section>
+
+        <!-- ============================================= 02 node control -->
+        <section class="panel panel-nodes" aria-labelledby="nodes-title">
+          <div class="panel-head">
+            <span class="panel-no">02</span>
+            <h2 id="nodes-title">Node control</h2>
+            <span class="panel-meta" id="device-count">0 / 0</span>
+          </div>
+
+          <div class="target-row" id="target-row">
+            <span class="tele-key">Target</span>
+            <div class="target-chips" id="target-chips" role="group" aria-label="Choose which node gestures control"></div>
+          </div>
+
+          <div class="device-list" id="device-list"></div>
+
+          <div class="empty-state" id="empty-state">
+            <h3>No nodes linked</h3>
+            <p>Link Home Assistant to control real lights, or run the simulation.</p>
+            <div class="empty-actions">
+              <button class="btn btn-key" id="empty-connect" type="button">Link home</button>
+              <button class="btn" id="empty-demo" type="button">Simulation</button>
+            </div>
+          </div>
+
+          <div class="log">
+            <div class="log-head"><span class="tele-key">Command log</span><button class="linkish" id="clear-log" type="button">Clear</button></div>
+            <ul class="log-list" id="log-list" aria-live="polite"><li class="log-empty">Awaiting input</li></ul>
+          </div>
+        </section>
+      </div>
+
+      <!-- ========================================== 03 gesture protocol -->
+      <section class="panel" aria-labelledby="protocol-title">
+        <div class="panel-head">
+          <span class="panel-no">03</span>
+          <h2 id="protocol-title">Gesture protocol</h2>
+          <span class="panel-meta">One hand · either hand</span>
+        </div>
+        <ul class="protocol" id="protocol"></ul>
+        <div class="pinch-legend">
+          <span class="legend-title">Command colour code</span>
+          <span class="legend-item" data-k="track"><i></i>Cyan — tracking, rotation off</span>
+          <span class="legend-item" data-k="pinch"><i></i>Green — pinched: turning switched on or off</span>
+          <span class="legend-item" data-k="roll"><i></i>Amber — turning, brightness moving</span>
+        </div>
+        <p class="protocol-note">
+          <strong>Hold an open palm to switch on, then turn that same hand: right brightens, left dims.</strong>
+          No pinch needed. Turning counts whether you <em>tilt</em> the hand in the air or <em>twist</em> the
+          palm over — both are read. The knob picks up the level the lights are already at, so it never jumps,
+          and about a quarter turn covers the whole range.
+          <strong>Pinch once</strong> to switch turning on, so it keeps working with your hand in any shape
+          at all; <strong>pinch again</strong> to switch it off. While the knob is turning, colour commands are held
+          back so a busy hand cannot recolour the room — but a <strong>closed fist always switches
+          everything off</strong>, locked or not. One brightness is shared by all four colours, so 1-2-3-4
+          recolours the light without changing how bright it is.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="howto-title">
+        <div class="panel-head">
+          <span class="panel-no">04</span>
+          <h2 id="howto-title">How to use it</h2>
+          <span class="panel-meta">Start here</span>
+        </div>
+        <ol class="howto">
+          <li><b>1</b><span><strong>Link your home.</strong> Choose <em>Link home</em>, paste a Home Assistant token, then tick the lights to control. Skip this to try the simulation.</span></li>
+          <li><b>2</b><span><strong>Engage optics.</strong> Allow the camera. Hold your hand about an arm's length away, palm toward the lens, with the whole hand in frame.</span></li>
+          <li><b>3</b><span><strong>Switch on.</strong> Hold an <strong>open palm</strong> up until the command bar fills.</span></li>
+          <li><b>4</b><span><strong>Turn that same hand to dim.</strong> <em>Right brightens, left dims.</em> Tilt it or twist the palm over — either counts. The number in the middle of your hand follows as you turn.</span></li>
+          <li><b>5</b><span><strong>Switch off.</strong> <strong>Close your hand</strong> into a fist and hold it. This always works, whatever else is going on.</span></li>
+          <li><b>6</b><span><strong>Pick a colour.</strong> Hold up 1, 2, 3 or 4 fingers for red, green, blue or white — the brightness stays exactly where you set it. <em>Pinch once</em> if you want to keep turning the brightness with your hand in some other shape, and <em>pinch again</em> to stop.</span></li>
+        </ol>
+        <p class="howto-note">
+          Nothing fires from a glance: every pose has to be held, and an open palm has to actually be turned
+          before it touches the brightness. A pinch can never pick a colour, however your other fingers are
+          arranged, and the hand stays inert for a moment while it unfolds out of one. Four fingers (white)
+          is held longest, because it is one relaxed thumb away from an open palm.
+          <strong>Your last colour and brightness are remembered</strong>, so lights come back on exactly as you
+          left them. If the room is very dark or lit a strong colour, SUNDAY corrects the camera automatically —
+          watch the <strong>Optics</strong> readout.
+        </p>
+      </section>
+
+      <footer class="footer">
+        <span class="credit">Concept &amp; direction — <strong>Hareesh Narayanan</strong></span>
+        <span>DURO Automation · Concept Automation</span>
+        <span>All processing on-device</span>
+      </footer>
+    </main>
+
+    <dialog class="sheet" id="setup-dialog" aria-labelledby="setup-title">
+      <div class="sheet-head">
+        <h2 id="setup-title">Link Home Assistant</h2>
+        <button class="btn btn-ghost btn-icon" id="close-setup" type="button" aria-label="Close">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <ol class="steps">
+        <li class="step is-active" data-step="1"><span>1</span>Authenticate</li>
+        <li class="step" data-step="2"><span>2</span>Select nodes</li>
+        <li class="step" data-step="3"><span>3</span>Linked</li>
+      </ol>
+
+      <div class="sheet-body" id="step-1">
+        <p class="sheet-copy">The token is held in the local server's memory only — never written to disk, never stored in the browser.</p>
+        <label class="field"><span class="field-label">Home Assistant address</span>
+          <input id="ha-url" class="input" type="text" inputmode="url" spellcheck="false" autocomplete="off" value="http://homeassistant.local:8123" /></label>
+        <label class="field"><span class="field-label">Long-lived access token</span>
+          <span class="input-wrap">
+            <input id="ha-token" class="input" type="password" autocomplete="off" spellcheck="false" placeholder="Paste token" />
+            <button class="reveal" id="toggle-token" type="button" aria-label="Show token">Show</button>
+          </span>
+          <span class="field-help">Home Assistant → your name → <strong>Security</strong> → <strong>Create token</strong>.</span></label>
+        <p class="alert" id="setup-message" role="status" hidden></p>
+        <div class="sheet-actions">
+          <button class="btn" id="use-demo" type="button">Simulation</button>
+          <button class="btn btn-key" id="connect-ha" type="button">Authenticate</button>
+        </div>
+      </div>
+
+      <div class="sheet-body" id="step-2" hidden>
+        <p class="sheet-copy">Select up to eight nodes. Dimmable lights gain brightness and colour.</p>
+        <label class="field"><span class="field-label">Filter</span>
+          <input id="entity-search" class="input" type="search" placeholder="Search nodes" autocomplete="off" /></label>
+        <div class="entity-list" id="entity-list" role="group" aria-label="Available nodes"></div>
+        <p class="alert" id="devices-message" role="status" hidden></p>
+        <div class="sheet-actions">
+          <span class="selection-count" id="selection-count">0 selected</span>
+          <button class="btn" id="back-to-1" type="button">Back</button>
+          <button class="btn btn-key" id="save-devices" type="button">Confirm</button>
+        </div>
+      </div>
+
+      <div class="sheet-body" id="step-3" hidden>
+        <div class="linked">
+          <div class="linked-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></div>
+          <h3>Home linked</h3>
+          <p id="success-summary">Gesture commands now reach Home Assistant.</p>
+        </div>
+        <div class="sheet-actions">
+          <button class="btn" id="change-devices" type="button">Change nodes</button>
+          <button class="btn" id="disconnect-ha" type="button">Unlink</button>
+          <button class="btn btn-key" id="finish-setup" type="button">Done</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="sr-only" id="announcer" aria-live="assertive" aria-atomic="true"></div>
+  </body>
+</html>
